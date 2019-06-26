@@ -27,7 +27,7 @@ import (
 	"strings"
 	"sync"
 	"time"
-
+	"os"
 	"github.com/mwitkow/go-conntrack"
 	"gopkg.in/yaml.v2"
 )
@@ -321,6 +321,19 @@ func NewTLSConfig(cfg *TLSConfig) (*tls.Config, error) {
 		tlsConfig.GetClientCertificate = cfg.getClientCertificate
 	}
 
+	//Set tls version if it is specified
+	switch cfg.MinVersion {
+        case "1.0":
+			tlsConfig.MinVersion = tls.VersionTLS10
+        case "1.1":
+			tlsConfig.MinVersion = tls.VersionTLS11
+        case "1.2":
+			tlsConfig.MinVersion = tls.VersionTLS12
+		case "1.3":
+			os.Setenv("GODEBUG", os.Getenv("GODEBUG")+",tls13=1")
+			tlsConfig.MinVersion = tls.VersionTLS13
+    }
+
 	return tlsConfig, nil
 }
 
@@ -336,6 +349,8 @@ type TLSConfig struct {
 	ServerName string `yaml:"server_name,omitempty"`
 	// Disable target certificate validation.
 	InsecureSkipVerify bool `yaml:"insecure_skip_verify"`
+	// Set the tls version.
+	MinVersion string `yaml:"min_version,omitempty"`
 }
 
 // UnmarshalYAML implements the yaml.Unmarshaler interface.

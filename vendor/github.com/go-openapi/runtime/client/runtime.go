@@ -74,6 +74,10 @@ type TLSClientOptions struct {
 	// InsecureSkipVerify controls whether the certificate chain and hostname presented
 	// by the server are validated. If false, any certificate is accepted.
 	InsecureSkipVerify bool
+	
+	// MinVersion specifies the version of TLS used.
+	// If it is not set, the default value will be selected deferred to the Go crypto/tls library.
+	MinVersion string
 
 	// Prevents callers using unkeyed fields.
 	_ struct{}
