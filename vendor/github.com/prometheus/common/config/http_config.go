@@ -329,9 +329,9 @@ func NewTLSConfig(cfg *TLSConfig) (*tls.Config, error) {
 			tlsConfig.MinVersion = tls.VersionTLS11
         case "1.2":
 			tlsConfig.MinVersion = tls.VersionTLS12
-		case "1.3":
-			os.Setenv("GODEBUG", os.Getenv("GODEBUG")+",tls13=1")
-			tlsConfig.MinVersion = tls.VersionTLS13
+        case "1.3":
+            os.Setenv("GODEBUG", os.Getenv("GODEBUG")+",tls13=1")
+            tlsConfig.MinVersion = tls.VersionTLS13
     }
 
 	return tlsConfig, nil
